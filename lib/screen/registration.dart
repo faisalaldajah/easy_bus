@@ -54,7 +54,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
     final User user = (await _auth
             .createUserWithEmailAndPassword(
       email: emailController.text,
-      password: emailController.text,
+      password: passwordController.text,
     )
             .catchError(
       (ex) {
@@ -189,7 +189,6 @@ class _RegistrationPageState extends State<RegistrationPage> {
                         title: 'Register',
                         onPressed: () async {
                           //check network availability
-
                           var connectivityResult =
                               await Connectivity().checkConnectivity();
                           if (connectivityResult != ConnectivityResult.mobile &&

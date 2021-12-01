@@ -66,7 +66,6 @@ class _LoginPageState extends State<LoginPage> {
         userLoggedin = true;
         currentFirebaseUser = user;
       });
-
       userRef.once().then((DataSnapshot snapshot) {
         if (snapshot.value != null) {
           Navigator.pushNamedAndRemoveUntil(
@@ -140,10 +139,9 @@ class _LoginPageState extends State<LoginPage> {
                         height: 40,
                       ),
                       GradientButton(
-                        title: 'Login',
+                        title: 'دخول',
                         onPressed: () async {
                           //check network availability
-
                           var connectivityResult =
                               await Connectivity().checkConnectivity();
                           if (connectivityResult != ConnectivityResult.mobile &&

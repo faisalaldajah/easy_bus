@@ -1,5 +1,4 @@
 // ignore_for_file: use_key_in_widget_constructors
-
 import 'package:easy_bus/screen/login.dart';
 import 'package:easy_bus/screen/mainPage.dart';
 import 'package:easy_bus/screen/registration.dart';

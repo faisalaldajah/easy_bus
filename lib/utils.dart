@@ -26,6 +26,7 @@ Color colorBtn = const Color(0xFF12CBC4);
 Color colorBtn1 = const Color(0xFF1dd1a1);
 
 User currentFirebaseUser;
+
 String serverKey =
     "AAAA4djqNz4:APA91bH4E26K_JW3jNrF7DqqGLE6p6cBJaeU5qHFb529bKdF3xOwgrR_XVOanAPmsMXBIhaunC2iYW104KzLttUI_MJU3qCe8Jlz5uTNe-YdCcMKXOyK45t8_DXvCTRaLwY1l7azczN4 ";
 
@@ -37,6 +38,7 @@ final CameraPosition googlePlex = CameraPosition(
   target: LatLng(31.954066, 35.931066),
   zoom: 14.4746,
 );
+
 bool youHaveData = false;
 
 bool userLoggedin = false;
