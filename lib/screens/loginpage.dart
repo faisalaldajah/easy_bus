@@ -1,15 +1,14 @@
-// ignore_for_file: use_key_in_widget_constructors
-import 'package:easy_bus/Widget/GradientButton.dart';
-import 'package:easy_bus/Widget/ProgressDialog.dart';
-import 'package:easy_bus/screen/ResetPassword.dart';
-import 'package:easy_bus/screen/registration.dart';
-import 'package:easy_bus/utils.dart';
+// ignore_for_file: prefer_const_constructors, use_key_in_widget_constructors
+import 'package:easy_bus/helpers/helpermethods.dart';
+import 'package:easy_bus/screens/StartPage.dart';
+import 'package:easy_bus/screens/registrationpage.dart';
+import 'package:easy_bus/widgets/GradientButton.dart';
+import 'package:easy_bus/widgets/ProgressDialog.dart';
 import 'package:connectivity/connectivity.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'mainpage.dart';
 
 class LoginPage extends StatefulWidget {
   static const String id = 'login';
@@ -20,15 +19,16 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
-  User user;
+  //TODO
   void showSnackBar(String title) {
     final snackbar = SnackBar(
       content: Text(
         title,
         textAlign: TextAlign.center,
-        style: const TextStyle(fontSize: 15),
+        style: TextStyle(fontSize: 15),
       ),
     );
+
     // ignore: deprecated_member_use
     scaffoldKey.currentState.showSnackBar(snackbar);
   }
@@ -48,28 +48,29 @@ class _LoginPageState extends State<LoginPage> {
         status: 'Logging you in',
       ),
     );
+
     final User user = (await _auth
             .signInWithEmailAndPassword(
       email: emailController.text,
       password: passwordController.text,
     )
-            .catchError((errMsg) {
+            .catchError((ex) {
+      //check error and display message
       Navigator.pop(context);
-      displayToastMessage('Wrong email or password', context);
+      PlatformException thisEx = ex;
+      showSnackBar(thisEx.message);
     }))
         .user;
 
     if (user != null) {
+      // verify login
       DatabaseReference userRef =
           FirebaseDatabase.instance.reference().child('users/${user.uid}');
-      setState(() {
-        userLoggedin = true;
-        currentFirebaseUser = user;
-      });
       userRef.once().then((DataSnapshot snapshot) {
         if (snapshot.value != null) {
+          HelperMethods.getCurrentUserInfo(context);
           Navigator.pushNamedAndRemoveUntil(
-              context, MainPage.id, (route) => false);
+              context, StartPage.id, (route) => false);
         }
       });
     }
@@ -83,63 +84,54 @@ class _LoginPageState extends State<LoginPage> {
       body: SafeArea(
         child: SingleChildScrollView(
           child: Padding(
-            padding: const EdgeInsets.all(8.0),
+            padding: EdgeInsets.all(8.0),
             child: Column(
               children: <Widget>[
-                const SizedBox(
-                  height: 30,
-                ),
+                SizedBox(height: 70),
                 Image.asset(
                   'assets/images/logo.png',
                   width: 150,
                   height: 150,
                 ),
-                const SizedBox(height: 20),
-                const Text(
-                  'Welcome.',
-                  style: TextStyle(fontFamily: 'bolt', fontSize: 30),
+                SizedBox(
+                  height: 40,
                 ),
-                const Text(
-                  'Best Service for you.',
-                  style: TextStyle(fontFamily: 'bolt', fontSize: 28),
-                ),
-                const SizedBox(height: 20),
                 Padding(
-                  padding: const EdgeInsets.all(20.0),
+                  padding: EdgeInsets.all(20.0),
                   child: Column(
                     children: <Widget>[
                       TextField(
                         controller: emailController,
                         keyboardType: TextInputType.emailAddress,
-                        decoration: const InputDecoration(
+                        decoration: InputDecoration(
                             labelText: 'Email address',
                             labelStyle: TextStyle(
                               fontSize: 14.0,
                             ),
                             hintStyle:
                                 TextStyle(color: Colors.grey, fontSize: 10.0)),
-                        style: const TextStyle(fontSize: 14),
+                        style: TextStyle(fontSize: 14),
                       ),
-                      const SizedBox(
+                      SizedBox(
                         height: 10,
                       ),
                       TextField(
                         controller: passwordController,
                         obscureText: true,
-                        decoration: const InputDecoration(
+                        decoration: InputDecoration(
                             labelText: 'Password',
                             labelStyle: TextStyle(
                               fontSize: 14.0,
                             ),
                             hintStyle:
                                 TextStyle(color: Colors.grey, fontSize: 10.0)),
-                        style: const TextStyle(fontSize: 14),
+                        style: TextStyle(fontSize: 14),
                       ),
-                      const SizedBox(
+                      SizedBox(
                         height: 40,
                       ),
                       GradientButton(
-                        title: 'دخول',
+                        title: 'LOGIN',
                         onPressed: () async {
                           //check network availability
                           var connectivityResult =
@@ -159,34 +151,22 @@ class _LoginPageState extends State<LoginPage> {
                             showSnackBar('Please enter a valid password');
                             return;
                           }
-                          setState(() {
-                            login();
-                          });
+
+                          login();
                         },
                       ),
                     ],
                   ),
                 ),
                 TextButton(
-                  onPressed: () {
-                    Navigator.pushNamedAndRemoveUntil(
-                        context, ResetPassword.id, (route) => false);
-                  },
-                  child: const Text(
-                    'Forget password',
-                    style: TextStyle(color: Colors.black),
-                  ),
-                ),
-                TextButton(
-                  onPressed: () {
-                    Navigator.pushNamedAndRemoveUntil(
-                        context, RegistrationPage.id, (route) => false);
-                  },
-                  child: const Text(
-                    'Don\'t have an account, sign up here',
-                    style: TextStyle(color: Colors.black),
-                  ),
-                ),
+                    onPressed: () {
+                      Navigator.pushNamedAndRemoveUntil(
+                          context, RegistrationPage.id, (route) => false);
+                    },
+                    child: Text(
+                      'Don\'t have an account, sign up here',
+                      style: TextStyle(color: Colors.black),
+                    )),
               ],
             ),
           ),

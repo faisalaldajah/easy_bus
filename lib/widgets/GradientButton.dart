@@ -1,6 +1,7 @@
-// ignore_for_file: file_names, prefer_const_constructors_in_immutables, use_key_in_widget_constructors
-import 'package:easy_bus/utils.dart';
+// ignore_for_file: file_names, prefer_const_constructors_in_immutables, use_key_in_widget_constructors, prefer_const_constructors
+
 import 'package:flutter/material.dart';
+import '../brand_colors.dart';
 
 class GradientButton extends StatefulWidget {
   final String title;
@@ -16,22 +17,24 @@ class _GradientButtonState extends State<GradientButton> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 250,
+      width: 300,
       height: 60,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(8),
         gradient: LinearGradient(
             begin: Alignment.topRight,
             end: Alignment.bottomLeft,
+            // ignore: prefer_const_literals_to_create_immutables
             colors: [
-              colorBtn,
-              colorBtn1,
+              BrandColors.colorAccent,
+              BrandColors.colorAccent1,
+              BrandColors.colorAccent,
             ]),
-        boxShadow: [
+        boxShadow: const [
           BoxShadow(
             blurRadius: 2,
             spreadRadius: 0.3,
-            color: colorBtn,
+            color: BrandColors.colorTextLight,
           ),
         ],
       ),
@@ -39,7 +42,7 @@ class _GradientButtonState extends State<GradientButton> {
         onPressed: widget.onPressed,
         child: Text(
           widget.title,
-          style: const TextStyle(fontSize: 25, color: Colors.white),
+          style: TextStyle(fontSize: 25,color: Colors.white),
         ),
       ),
     );

@@ -1,11 +1,16 @@
 // ignore_for_file: use_key_in_widget_constructors
-import 'package:easy_bus/screen/login.dart';
-import 'package:easy_bus/screen/mainPage.dart';
-import 'package:easy_bus/screen/registration.dart';
-import 'package:easy_bus/utils.dart';
+
+import 'package:easy_bus/dataprovider/appdata.dart';
+import 'package:easy_bus/globalvariable.dart';
+import 'package:easy_bus/screens/PhoneLogin/screens/loginpage.dart';
+import 'package:easy_bus/screens/StartPage.dart';
+import 'package:easy_bus/screens/loginpage.dart';
+import 'package:easy_bus/screens/mainpage.dart';
+import 'package:easy_bus/screens/registrationpage.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -16,22 +21,26 @@ Future<void> main() async {
 }
 
 class MyApp extends StatelessWidget {
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        fontFamily: 'JF-Flat-regular',
-        primarySwatch: Colors.blue,
+    return ChangeNotifierProvider(
+      create: (context) => AppData(),
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        theme: ThemeData(
+          fontFamily: 'Brand-Regular',
+          primarySwatch: Colors.blue,
+        ),
+        initialRoute:
+            (currentFirebaseUser == null) ? LoginPage.id : StartPage.id,
+        routes: {
+          RegistrationPage.id: (context) => RegistrationPage(),
+          LoginScreens.id: (context) => LoginScreens(),
+          MainPage.id: (context) => MainPage(),
+          StartPage.id: (context) => StartPage(),
+          LoginPage.id:(context)=>LoginPage(),
+        },
       ),
-      title: 'Easy Bus',
-      initialRoute: (currentFirebaseUser == null) ? LoginPage.id : MainPage.id,
-      routes: {
-        MainPage.id: (context) => MainPage(),
-        LoginPage.id: (context) => LoginPage(),
-        RegistrationPage.id: (context) => RegistrationPage(),
-      },
     );
   }
 }

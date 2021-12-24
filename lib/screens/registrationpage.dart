@@ -1,14 +1,15 @@
-// ignore_for_file: use_key_in_widget_constructors
-import 'package:easy_bus/Widget/GradientButton.dart';
-import 'package:easy_bus/Widget/ProgressDialog.dart';
-import 'package:easy_bus/screen/mainPage.dart';
-import 'package:easy_bus/utils.dart';
+// ignore_for_file: use_key_in_widget_constructors, prefer_const_constructors, deprecated_member_use
+import 'package:easy_bus/brand_colors.dart';
+import 'package:easy_bus/screens/StartPage.dart';
+import 'package:easy_bus/screens/loginpage.dart';
+import 'package:easy_bus/widgets/GradientButton.dart';
+import 'package:easy_bus/widgets/ProgressDialog.dart';
+import 'package:easy_bus/widgets/TaxiButton.dart';
 import 'package:connectivity/connectivity.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'login.dart';
 
 class RegistrationPage extends StatefulWidget {
   static const String id = 'register';
@@ -19,16 +20,15 @@ class RegistrationPage extends StatefulWidget {
 
 class _RegistrationPageState extends State<RegistrationPage> {
   final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
-
+  //TODO
   void showSnackBar(String title) {
     final snackbar = SnackBar(
       content: Text(
         title,
         textAlign: TextAlign.center,
-        style: const TextStyle(fontSize: 15),
+        style: TextStyle(fontSize: 15),
       ),
     );
-    // ignore: deprecated_member_use
     scaffoldKey.currentState.showSnackBar(snackbar);
   }
 
@@ -51,19 +51,18 @@ class _RegistrationPageState extends State<RegistrationPage> {
         status: 'Registering you...',
       ),
     );
+
     final User user = (await _auth
             .createUserWithEmailAndPassword(
       email: emailController.text,
       password: passwordController.text,
     )
-            .catchError(
-      (ex) {
-        //check error and display message
-        Navigator.pop(context);
-        PlatformException thisEx = ex;
-        showSnackBar(thisEx.message);
-      },
-    ))
+            .catchError((ex) {
+      //check error and display message
+      Navigator.pop(context);
+      PlatformException thisEx = ex;
+      showSnackBar(thisEx.message);
+    }))
         .user;
 
     Navigator.pop(context);
@@ -71,18 +70,19 @@ class _RegistrationPageState extends State<RegistrationPage> {
     if (user != null) {
       DatabaseReference newUserRef =
           FirebaseDatabase.instance.reference().child('users/${user.uid}');
-      
+
       //Prepare data to be saved on users table
       Map userMap = {
         'fullname': fullNameController.text,
         'email': emailController.text,
         'phone': phoneController.text,
       };
+
       newUserRef.set(userMap);
-      userLoggedin = true;
 
       //Take the user to the mainPage
-      Navigator.pushNamedAndRemoveUntil(context, MainPage.id, (route) => false);
+      Navigator.pushNamedAndRemoveUntil(
+          context, StartPage.id, (route) => false);
     }
   }
 
@@ -94,40 +94,45 @@ class _RegistrationPageState extends State<RegistrationPage> {
       body: SafeArea(
         child: SingleChildScrollView(
           child: Padding(
-            padding: const EdgeInsets.all(8.0),
+            padding: EdgeInsets.all(8.0),
             child: Column(
               children: <Widget>[
-                const SizedBox(height: 20),
-                Image.asset(
-                  'assets/images/logo.png',
-                  width: 150,
-                  height: 150,
+                SizedBox(
+                  height: 70,
                 ),
-                const SizedBox(height: 20),
-                const Text(
-                  'Create new account',
-                  style: TextStyle(fontFamily: 'bolt', fontSize: 25),
+                Image(
+                  alignment: Alignment.center,
+                  height: 100.0,
+                  width: 100.0,
+                  image: AssetImage('assets/images/logo.png'),
                 ),
-                const SizedBox(height: 20),
+                SizedBox(
+                  height: 40,
+                ),
+                Text(
+                  'Create a Rider\'s Account',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(fontSize: 25, fontFamily: 'Brand-Bold'),
+                ),
                 Padding(
-                  padding: const EdgeInsets.all(20.0),
+                  padding: EdgeInsets.all(20.0),
                   child: Column(
                     children: <Widget>[
                       // Fullname
                       TextField(
                         controller: fullNameController,
                         keyboardType: TextInputType.text,
-                        decoration: const InputDecoration(
+                        decoration: InputDecoration(
                             labelText: 'Full name',
                             labelStyle: TextStyle(
                               fontSize: 14.0,
                             ),
                             hintStyle:
                                 TextStyle(color: Colors.grey, fontSize: 10.0)),
-                        style: const TextStyle(fontSize: 14),
+                        style: TextStyle(fontSize: 14),
                       ),
 
-                      const SizedBox(
+                      SizedBox(
                         height: 10,
                       ),
 
@@ -135,17 +140,17 @@ class _RegistrationPageState extends State<RegistrationPage> {
                       TextField(
                         controller: emailController,
                         keyboardType: TextInputType.emailAddress,
-                        decoration: const InputDecoration(
-                            labelText: 'Email',
+                        decoration: InputDecoration(
+                            labelText: 'Email address',
                             labelStyle: TextStyle(
                               fontSize: 14.0,
                             ),
                             hintStyle:
                                 TextStyle(color: Colors.grey, fontSize: 10.0)),
-                        style: const TextStyle(fontSize: 14),
+                        style: TextStyle(fontSize: 14),
                       ),
 
-                      const SizedBox(
+                      SizedBox(
                         height: 10,
                       ),
 
@@ -153,17 +158,17 @@ class _RegistrationPageState extends State<RegistrationPage> {
                       TextField(
                         controller: phoneController,
                         keyboardType: TextInputType.phone,
-                        decoration: const InputDecoration(
-                            labelText: 'Phone',
+                        decoration: InputDecoration(
+                            labelText: 'Phone number',
                             labelStyle: TextStyle(
                               fontSize: 14.0,
                             ),
                             hintStyle:
                                 TextStyle(color: Colors.grey, fontSize: 10.0)),
-                        style: const TextStyle(fontSize: 14),
+                        style: TextStyle(fontSize: 14),
                       ),
 
-                      const SizedBox(
+                      SizedBox(
                         height: 10,
                       ),
 
@@ -171,24 +176,25 @@ class _RegistrationPageState extends State<RegistrationPage> {
                       TextField(
                         controller: passwordController,
                         obscureText: true,
-                        decoration: const InputDecoration(
+                        decoration: InputDecoration(
                             labelText: 'Password',
                             labelStyle: TextStyle(
                               fontSize: 14.0,
                             ),
                             hintStyle:
                                 TextStyle(color: Colors.grey, fontSize: 10.0)),
-                        style: const TextStyle(fontSize: 14),
+                        style: TextStyle(fontSize: 14),
                       ),
 
-                      const SizedBox(
+                      SizedBox(
                         height: 40,
                       ),
 
                       GradientButton(
-                        title: 'Register',
+                        title: 'REGISTER',
                         onPressed: () async {
                           //check network availability
+
                           var connectivityResult =
                               await Connectivity().checkConnectivity();
                           if (connectivityResult != ConnectivityResult.mobile &&
@@ -218,9 +224,8 @@ class _RegistrationPageState extends State<RegistrationPage> {
                                 'password must be at least 8 characters');
                             return;
                           }
-                          setState(() {
-                            registerUser();
-                          });
+
+                          registerUser();
                         },
                       ),
                     ],
@@ -231,8 +236,12 @@ class _RegistrationPageState extends State<RegistrationPage> {
                       Navigator.pushNamedAndRemoveUntil(
                           context, LoginPage.id, (route) => false);
                     },
-                    child: const Text('Already have a DRIVER account? Log in',
-                        style: TextStyle(color: Colors.black))),
+                    child: Text(
+                      'Already have an account? Log in',
+                      style: TextStyle(
+                        color: Colors.black,
+                      ),
+                    )),
               ],
             ),
           ),

@@ -1,5 +1,7 @@
-import 'package:easy_bus/models/address.dart';
+
 import 'package:flutter/cupertino.dart';
+import 'package:easy_bus/datamodels/address.dart';
+
 class AppData extends ChangeNotifier{
 
   Address pickupAddress;
