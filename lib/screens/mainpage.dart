@@ -947,7 +947,7 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
 
   //TODO
   void startGeofireListener() {
-    Geofire.initialize('driversAvailable/$driverType');
+    Geofire.initialize('driversAvailable');
     Geofire.queryAtLocation(
             currentPosition.latitude, currentPosition.longitude, 20)
         .listen((map) {
@@ -956,9 +956,9 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
         switch (callBack) {
           case Geofire.onKeyEntered:
             NearbyDriver nearbyDriver = NearbyDriver();
-            nearbyDriver.key = map[driverType]['key'];
-            nearbyDriver.latitude = map[driverType]['latitude'];
-            nearbyDriver.longitude = map[driverType]['longitude'];
+            nearbyDriver.key = map['key'];
+            nearbyDriver.latitude = map['latitude'];
+            nearbyDriver.longitude = map['longitude'];
             FireHelper.nearbyDriverList.add(nearbyDriver);
             if (nearbyDriversKeysLoaded) {
               updateDriversOnMap();
@@ -970,9 +970,9 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
             break;
           case Geofire.onKeyMoved:
             NearbyDriver nearbyDriver = NearbyDriver();
-            nearbyDriver.key = map[driverType]['key'];
-            nearbyDriver.latitude = map[driverType]['latitude'];
-            nearbyDriver.longitude = map[driverType]['longitude'];
+            nearbyDriver.key = map['key'];
+            nearbyDriver.latitude = map['latitude'];
+            nearbyDriver.longitude = map['longitude'];
             FireHelper.updateNearbyLocation(nearbyDriver);
             updateDriversOnMap();
             break;
