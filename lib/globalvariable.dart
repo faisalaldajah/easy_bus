@@ -14,5 +14,9 @@ const CameraPosition googlePlex = CameraPosition(
 User currentFirebaseUser;
 
 UserData currentUserInfo;
-
-String driverCarStyle;
+LatLng univrsityLocation = const LatLng(31.8328215, 35.890331);
+String driverType = '';
+Map places = {
+  'ragdan': [31.9639346, 35.9596843],
+  'marka': [31.9777133, 35.9781893],
+};

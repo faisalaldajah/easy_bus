@@ -19,7 +19,6 @@ import 'package:provider/provider.dart';
 
 class HelperMethods {
   static void getCurrentUserInfo(context) async {
-    //////
     if (await Permission.locationWhenInUse.serviceStatus.isEnabled) {
       currentFirebaseUser = FirebaseAuth.instance.currentUser;
       String userid = currentFirebaseUser.uid;
@@ -52,7 +51,6 @@ class HelperMethods {
     }
     String url =
         'https://maps.googleapis.com/maps/api/geocode/json?latlng=${position.latitude},${position.longitude}&key=$mapKey';
-
     var response = await RequestHelper.getRequest(url);
     if (response != 'failed') {
       placeAddress = response['results'][0]['formatted_address'];

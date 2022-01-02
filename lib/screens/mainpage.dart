@@ -8,7 +8,6 @@ import 'package:easy_bus/globalvariable.dart';
 import 'package:easy_bus/helpers/firehelper.dart';
 import 'package:easy_bus/helpers/helpermethods.dart';
 import 'package:easy_bus/rideVaribles.dart';
-import 'package:easy_bus/screens/searchpage.dart';
 import 'package:easy_bus/styles/styles.dart';
 import 'package:easy_bus/widgets/BrandDivier.dart';
 import 'package:easy_bus/widgets/CollectPaymentDialog.dart';
@@ -19,7 +18,6 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_geofire/flutter_geofire.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'dart:async';
@@ -125,14 +123,85 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
       ImageConfiguration imageConfiguration =
           createLocalImageConfiguration(context, size: Size(2, 2));
       BitmapDescriptor.fromAssetImage(
-              imageConfiguration,
-              (Platform.isIOS)
-                  ? 'images/car_ios.png'
-                  : 'images/car_android.png')
-          .then((icon) {
+        imageConfiguration,
+        (Platform.isIOS) ? 'images/car_ios.png' : 'images/car_android.png',
+      ).then((icon) {
         nearbyIcon = icon;
       });
     }
+  }
+
+  void chooseDistrectlBottomSheet(context) {
+    showModalBottomSheet(
+      elevation: 5,
+      backgroundColor: Colors.white.withOpacity(0),
+      context: context,
+      builder: (BuildContext bc) {
+        return Container(
+          decoration: BoxDecoration(
+            //color: Colors.transparent,
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(15),
+              topRight: Radius.circular(15),
+            ),
+          ),
+          child: Container(
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.only(
+                topLeft: const Radius.circular(20.0),
+                topRight: const Radius.circular(20.0),
+              ),
+            ),
+            child: Wrap(
+              children: <Widget>[
+                Container(height: 10),
+                Center(
+                  child: Text(
+                    'choose place',
+                    style: TextStyle(),
+                  ),
+                ),
+                Container(height: 10),
+                Container(
+                  height: MediaQuery.of(context).size.width * 0.8,
+                  //TODO
+                  child: ListView(
+                    children: places.keys
+                        .map(
+                          (e) => ListTile(
+                            title: Text(
+                              e.toString(),
+                              style: TextStyle(fontSize: 22),
+                            ),
+                            trailing: Icon(
+                              Icons.place,
+                              color: BrandColors.colorAccent,
+                            ),
+                            onTap: () async {
+                              setState(() {
+                                driverType = e.toString();
+                              });
+                              LatLng ps = LatLng(places[e][0], places[e][1]);
+                              await HelperMethods.findCordinateAddress(
+                                  ps, context, 'pickUp');
+                              ps = univrsityLocation;
+                              await HelperMethods.findCordinateAddress(
+                                  ps, context, '');
+                              Navigator.pop(context);
+                              showDetailSheet();
+                            },
+                          ),
+                        )
+                        .toList(),
+                  ),
+                )
+              ],
+            ),
+          ),
+        );
+      },
+    );
   }
 
   @override
@@ -379,12 +448,17 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
                                 height: 30,
                               ),
                               Center(
-                                child: Icon(Icons.bus_alert,size: 35,),
+                                child: Icon(
+                                  Icons.bus_alert,
+                                  size: 35,
+                                ),
                               ),
                               SizedBox(height: 15),
-                              //add here university location
+                              //TODO
                               GradientButton(
-                                onPressed: () {},
+                                onPressed: () {
+                                  chooseDistrectlBottomSheet(context);
+                                },
                                 title: 'Start',
                               ),
                             ],
@@ -407,8 +481,9 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(15),
-                      topRight: Radius.circular(15)),
+                    topLeft: Radius.circular(15),
+                    topRight: Radius.circular(15),
+                  ),
                   // ignore: prefer_const_literals_to_create_immutables
                   boxShadow: [
                     BoxShadow(
@@ -429,13 +504,11 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
                     child: Column(
                       children: <Widget>[
                         //TODO
-                        OutlinedButton(
+                        TextButton(
                           onPressed: () {
                             setState(() {
-                              locationOnMap = false;
                               appState = 'REQUESTING';
                             });
-                            driverCarStyle = 'driversAvailable';
                             showRequestingSheet();
                             availableDrivers = FireHelper.nearbyDriverList;
                             findDriver();
@@ -443,11 +516,10 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
                           child: Container(
                             padding: EdgeInsets.symmetric(horizontal: 20),
                             width: double.infinity,
-                            color: BrandColors.colorAccent1,
                             child: Row(
                               children: <Widget>[
                                 Image.asset(
-                                  'images/taxi1.png',
+                                  'assets/images/logo.png',
                                   height: 70,
                                   width: 70,
                                 ),
@@ -458,11 +530,11 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: <Widget>[
                                     Text(
-                                      'Taxi',
+                                      'To University',
                                       style: TextStyle(
                                           fontSize: 18,
                                           fontFamily: 'Brand-Bold',
-                                          color: Colors.white),
+                                          color: Colors.black),
                                     ),
                                     Text(
                                       (tripDirectionDetails != null)
@@ -470,116 +542,13 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
                                           : '',
                                       style: TextStyle(
                                         fontSize: 16,
-                                        color: BrandColors.colorBackground,
+                                        color: BrandColors.colorAccent,
                                       ),
                                     )
                                   ],
                                 ),
-                                Expanded(
-                                  child: Container(),
-                                ),
-                                Text(
-                                  (tripDirectionDetails != null)
-                                      ? '\$${HelperMethods.estimateFares(tripDirectionDetails)}'
-                                      : '',
-                                  style: TextStyle(
-                                    fontSize: 18,
-                                    fontFamily: 'Brand-Bold',
-                                    color: BrandColors.colorBackground,
-                                  ),
-                                ),
                               ],
                             ),
-                          ),
-                        ),
-                        SizedBox(height: 10),
-                        OutlinedButton(
-                          onPressed: () {
-                            setState(() {
-                              locationOnMap = false;
-                              appState = 'REQUESTING';
-                              driverCarStyle = 'economyAvailable';
-                            });
-                            showRequestingSheet();
-                            availableDrivers = FireHelper.nearbyDriverList;
-                            findDriver();
-                          },
-                          child: Container(
-                            padding: EdgeInsets.symmetric(horizontal: 20),
-                            width: double.infinity,
-                            color: BrandColors.colorAccent1,
-                            child: Row(
-                              children: <Widget>[
-                                Image.asset(
-                                  'images/taxi.png',
-                                  height: 70,
-                                  width: 70,
-                                ),
-                                SizedBox(
-                                  width: 16,
-                                ),
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: <Widget>[
-                                    Text(
-                                      'Economy',
-                                      style: TextStyle(
-                                        fontSize: 18,
-                                        fontFamily: 'Brand-Bold',
-                                        color: Colors.white,
-                                      ),
-                                    ),
-                                    Text(
-                                      (tripDirectionDetails != null)
-                                          ? tripDirectionDetails.distanceText
-                                          : '',
-                                      style: TextStyle(
-                                          fontSize: 16,
-                                          color: BrandColors.colorBackground),
-                                    )
-                                  ],
-                                ),
-                                Expanded(child: Container()),
-                                Text(
-                                  (tripDirectionDetails != null)
-                                      ? 'JD ${HelperMethods.estimateFares(tripDirectionDetails)}'
-                                      : '',
-                                  style: TextStyle(
-                                    fontSize: 18,
-                                    fontFamily: 'Brand-Bold',
-                                    color: BrandColors.colorBackground,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                        SizedBox(
-                          height: 22,
-                        ),
-                        Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 16),
-                          child: Row(
-                            // ignore: prefer_const_literals_to_create_immutables
-                            children: <Widget>[
-                              Icon(
-                                FontAwesomeIcons.moneyBillAlt,
-                                size: 18,
-                                color: BrandColors.colorTextLight,
-                              ),
-                              SizedBox(
-                                width: 16,
-                              ),
-                              Text('Cash'),
-                              SizedBox(
-                                width: 5,
-                              ),
-                              Icon(
-                                Icons.keyboard_arrow_down,
-                                color: BrandColors.colorTextLight,
-                                size: 16,
-                              ),
-                            ],
                           ),
                         ),
                         SizedBox(
@@ -978,7 +947,7 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
 
   //TODO
   void startGeofireListener() {
-    Geofire.initialize(driverCarStyle);
+    Geofire.initialize(driverType);
     Geofire.queryAtLocation(
             currentPosition.latitude, currentPosition.longitude, 20)
         .listen((map) {
@@ -1039,7 +1008,6 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
         icon: nearbyIcon,
         rotation: HelperMethods.generateRandomNumber(360),
       );
-
       tempMarkers.add(thisMarker);
     }
 
@@ -1256,6 +1224,7 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
   }
 
   void findDriver() {
+    print(driverType);
     if (availableDrivers.isEmpty) {
       cancelRequest();
       resetApp();

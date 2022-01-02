@@ -34,6 +34,35 @@
           ]
         }
       }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:970006869822:android:00df6de14a79d5a7289e6f",
+        "android_client_info": {
+          "package_name": "wetech.zy.easy_bus_driver"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "970006869822-t3pojts4gsmbffal3kbb0rk0dtmdvp00.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBrBQH0UcOOinVAScBYRnTgW9V4d-NP7mk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "970006869822-t3pojts4gsmbffal3kbb0rk0dtmdvp00.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
     }
   ],
   "configuration_version": "1"

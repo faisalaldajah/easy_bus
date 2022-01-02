@@ -1,10 +1,8 @@
 // ignore_for_file: use_key_in_widget_constructors, prefer_const_constructors, deprecated_member_use
-import 'package:easy_bus/brand_colors.dart';
 import 'package:easy_bus/screens/StartPage.dart';
 import 'package:easy_bus/screens/loginpage.dart';
 import 'package:easy_bus/widgets/GradientButton.dart';
 import 'package:easy_bus/widgets/ProgressDialog.dart';
-import 'package:easy_bus/widgets/TaxiButton.dart';
 import 'package:connectivity/connectivity.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
