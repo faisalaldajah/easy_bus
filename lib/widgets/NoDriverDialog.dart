@@ -1,7 +1,7 @@
 // ignore_for_file: file_names, use_key_in_widget_constructors, prefer_const_constructors
 
 import 'package:easy_bus/brand_colors.dart';
-import 'package:easy_bus/widgets/TaxiOutlineButton.dart';
+import 'package:easy_bus/widgets/BusOutlineButton.dart';
 import 'package:flutter/material.dart';
 
 class NoDriverDialog extends StatelessWidget {
@@ -40,7 +40,7 @@ class NoDriverDialog extends StatelessWidget {
 
                 SizedBox(
                   width: 200,
-                  child: TaxiOutlineButton(
+                  child: BusOutlineButton(
                     title: 'CLOSE',
                     color: BrandColors.colorLightGrayFair,
                     onPressed: (){

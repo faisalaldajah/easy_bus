@@ -10,7 +10,7 @@ import 'package:easy_bus/helpers/helpermethods.dart';
 import 'package:easy_bus/rideVaribles.dart';
 import 'package:easy_bus/styles/styles.dart';
 import 'package:easy_bus/widgets/BrandDivier.dart';
-import 'package:easy_bus/widgets/CollectPaymentDialog.dart';
+import 'package:easy_bus/widgets/ThanksDialog.dart';
 import 'package:easy_bus/widgets/GradientButton.dart';
 import 'package:easy_bus/widgets/NoDriverDialog.dart';
 import 'package:easy_bus/widgets/ProgressDialog.dart';
@@ -25,7 +25,7 @@ import 'package:outline_material_icons/outline_material_icons.dart';
 import 'dart:io';
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:provider/provider.dart';
-import 'package:easy_bus/widgets/TaxiButton.dart';
+import 'package:easy_bus/widgets/BusButton.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class MainPage extends StatefulWidget {
@@ -414,7 +414,7 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
                                         });
                                       },
                                     )
-                                  : TaxiButton(
+                                  : BusButton(
                                       title: 'Pickup',
                                       onPressed: () async {
                                         LatLng ps = await getCenter();

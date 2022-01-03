@@ -2,13 +2,13 @@
 import 'package:easy_bus/brand_colors.dart';
 import 'package:flutter/material.dart';
 
-class TaxiOutlineButton extends StatelessWidget {
+class BusOutlineButton extends StatelessWidget {
 
   final String title;
   final Function onPressed;
   final Color color;
 
-  TaxiOutlineButton({this.title, this.onPressed, this.color});
+  BusOutlineButton({this.title, this.onPressed, this.color});
 
   @override
   Widget build(BuildContext context) {

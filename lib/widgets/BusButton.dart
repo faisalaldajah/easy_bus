@@ -3,12 +3,12 @@
 import 'package:flutter/material.dart';
 import 'package:easy_bus/brand_colors.dart';
 
-class TaxiButton extends StatelessWidget {
+class BusButton extends StatelessWidget {
   final String title;
   final Color color;
   final Function onPressed;
 
-  TaxiButton({this.title, this.onPressed, this.color});
+  BusButton({this.title, this.onPressed, this.color});
 
   @override
   Widget build(BuildContext context) {
