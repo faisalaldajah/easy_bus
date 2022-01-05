@@ -131,7 +131,146 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
     }
   }
 
-  void chooseDistrectlBottomSheet(context) {
+  void chooseYourWaylBottomSheet(context) {
+    showModalBottomSheet(
+      elevation: 5,
+      backgroundColor: Colors.white.withOpacity(0),
+      context: context,
+      builder: (BuildContext bc) {
+        return Container(
+          decoration: BoxDecoration(
+            //color: Colors.transparent,
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(15),
+              topRight: Radius.circular(15),
+            ),
+          ),
+          child: Container(
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.only(
+                topLeft: const Radius.circular(20.0),
+                topRight: const Radius.circular(20.0),
+              ),
+            ),
+            child: Wrap(
+              children: <Widget>[
+                Container(height: 10),
+                Center(
+                  child: Text(
+                    'choose place',
+                    style: TextStyle(),
+                  ),
+                ),
+                Container(height: 10),
+                Container(
+                  height: MediaQuery.of(context).size.width * 0.8,
+                  //TODO
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Row(),
+                      GradientButton(
+                        onPressed: () {
+                          Navigator.pop(context);
+                          chooseDistrectToUnilBottomSheet(context);
+                        },
+                        title: 'Go To Uni',
+                      ),
+                      SizedBox(height: 25),
+                      GradientButton(
+                        onPressed: () {
+                          Navigator.pop(context);
+                          chooseDistrectFromUnilBottomSheet(context);
+                        },
+                        title: 'Back From Uni',
+                      )
+                    ],
+                  ),
+                )
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  void chooseDistrectFromUnilBottomSheet(context) {
+    showModalBottomSheet(
+      elevation: 5,
+      backgroundColor: Colors.white.withOpacity(0),
+      context: context,
+      builder: (BuildContext bc) {
+        return Container(
+          decoration: BoxDecoration(
+            //color: Colors.transparent,
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(15),
+              topRight: Radius.circular(15),
+            ),
+          ),
+          child: Container(
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.only(
+                topLeft: const Radius.circular(20.0),
+                topRight: const Radius.circular(20.0),
+              ),
+            ),
+            child: Wrap(
+              children: <Widget>[
+                Container(height: 10),
+                Center(
+                  child: Text(
+                    'choose place',
+                    style: TextStyle(),
+                  ),
+                ),
+                Container(height: 10),
+                Container(
+                  height: MediaQuery.of(context).size.width * 0.8,
+                  //TODO
+                  child: ListView(
+                    children: places.keys
+                        .map(
+                          (e) => ListTile(
+                            title: Text(
+                              e.toString(),
+                              style: TextStyle(fontSize: 22),
+                            ),
+                            trailing: Icon(
+                              Icons.place,
+                              color: BrandColors.colorAccent,
+                            ),
+                            onTap: () async {
+                              setState(() {
+                                driverType = e.toString();
+                              });
+                              LatLng ps = univrsityLocation;
+                              await HelperMethods.findCordinateAddress(
+                                  ps, context, 'pickUp');
+                              ps = LatLng(places[e][0], places[e][1]);
+                              await HelperMethods.findCordinateAddress(
+                                  ps, context, '');
+                              Navigator.pop(context);
+                              showDetailSheet();
+                            },
+                          ),
+                        )
+                        .toList(),
+                  ),
+                )
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  void chooseDistrectToUnilBottomSheet(context) {
     showModalBottomSheet(
       elevation: 5,
       backgroundColor: Colors.white.withOpacity(0),
@@ -224,10 +363,12 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
                   decoration: const BoxDecoration(color: Colors.white),
                   child: Row(
                     children: <Widget>[
-                      Image.asset(
-                        'images/user_icon.png',
-                        height: 60,
-                        width: 60,
+                      CircleAvatar(
+                        child: Icon(
+                          Icons.person,
+                          color: Colors.white,
+                        ),
+                        backgroundColor: BrandColors.colorAccent,
                       ),
                       const SizedBox(
                         width: 15,
@@ -256,20 +397,6 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
               BrandDivider(),
               const SizedBox(
                 height: 10,
-              ),
-              ListTile(
-                leading: const Icon(OMIcons.cardGiftcard),
-                title: Text(
-                  'Free Rides',
-                  style: kDrawerItemStyle,
-                ),
-              ),
-              ListTile(
-                leading: const Icon(OMIcons.creditCard),
-                title: Text(
-                  'Payments',
-                  style: kDrawerItemStyle,
-                ),
               ),
               ListTile(
                 leading: Icon(OMIcons.history),
@@ -390,79 +517,43 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
                 child: Padding(
                   padding: EdgeInsets.symmetric(horizontal: 24, vertical: 18),
                   child: SingleChildScrollView(
-                    child: (locationOnMap)
-                        ? Column(
-                            // ignore: prefer_const_literals_to_create_immutables
-                            children: [
-                              SizedBox(height: 15),
-                              Text('Set your Location'),
-                              SizedBox(height: 20),
-                              Image.asset('images/desticon.png'),
-                              SizedBox(height: 20),
-                              //TODO
-                              (pinStatus == 'direction location')
-                                  ? GradientButton(
-                                      title: 'Destination',
-                                      onPressed: () async {
-                                        LatLng ps = await getCenter();
-                                        distenationAdrress = await HelperMethods
-                                            .findCordinateAddress(
-                                                ps, context, 'pickUp');
-
-                                        setState(() {
-                                          pinStatus = 'pickup location';
-                                        });
-                                      },
-                                    )
-                                  : BusButton(
-                                      title: 'Pickup',
-                                      onPressed: () async {
-                                        LatLng ps = await getCenter();
-                                        pickUpAdrress = await HelperMethods
-                                            .findCordinateAddress(
-                                                ps, context, '');
-                                        showDetailSheet();
-                                      },
-                                    ),
-                            ],
-                          )
-                        : Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: <Widget>[
-                              SizedBox(
-                                height: 5,
-                              ),
-                              Text(
-                                'Nice to see you!',
-                                style: TextStyle(fontSize: 10),
-                              ),
-                              SizedBox(height: 5),
-                              Text(
-                                'Start your jureny!',
-                                style: TextStyle(
-                                  fontSize: 18,
-                                  fontFamily: 'Brand-Bold',
-                                ),
-                              ),
-                              SizedBox(
-                                height: 30,
-                              ),
-                              Center(
-                                child: Icon(
-                                  Icons.bus_alert,
-                                  size: 35,
-                                ),
-                              ),
-                              SizedBox(height: 15),
-                              //TODO
-                              GradientButton(
-                                onPressed: () {
-                                  chooseDistrectlBottomSheet(context);
-                                },
-                                title: 'Start',
-                              ),
-                            ],
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        SizedBox(
+                          height: 5,
+                        ),
+                        Text(
+                          'Nice to see you!',
+                          style: TextStyle(fontSize: 10),
+                        ),
+                        SizedBox(height: 5),
+                        Text(
+                          'Start your jureny!',
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontFamily: 'Brand-Bold',
                           ),
+                        ),
+                        SizedBox(
+                          height: 30,
+                        ),
+                        Center(
+                          child: Icon(
+                            Icons.bus_alert,
+                            size: 35,
+                          ),
+                        ),
+                        SizedBox(height: 15),
+                        //TODO
+                        GradientButton(
+                          onPressed: () {
+                            chooseYourWaylBottomSheet(context);
+                          },
+                          title: 'Start',
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ),
@@ -804,16 +895,6 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
               ),
             ),
           ),
-
-          ///Location from map
-          //TODO
-          (locationOnMap)
-              ? Positioned(
-                  top: 225,
-                  right: 165,
-                  child: Image.asset('images/desticon.png'),
-                )
-              : Container(),
         ],
       ),
     );
@@ -1291,170 +1372,4 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
       });
     });
   }
-
-  //TODO
-  Future<LatLng> getCenter() async {
-    final GoogleMapController controller = await _controller.future;
-    if (pinStatus == 'direction location') {
-      LatLngBounds visibleRegion = await controller.getVisibleRegion();
-      LatLng centerLatLng = LatLng(
-        (visibleRegion.northeast.latitude + visibleRegion.southwest.latitude) /
-            2,
-        (visibleRegion.northeast.longitude +
-                visibleRegion.southwest.longitude) /
-            2,
-      );
-      return centerLatLng;
-    } else if (pinStatus == 'pickup location') {
-      LatLngBounds visibleRegion = await controller.getVisibleRegion();
-      LatLng centerLatLng = LatLng(
-        (visibleRegion.northeast.latitude + visibleRegion.southwest.latitude) /
-            2,
-        (visibleRegion.northeast.longitude +
-                visibleRegion.southwest.longitude) /
-            2,
-      );
-
-      return centerLatLng;
-    }
-  }
 }
-
-//  GestureDetector(
-//                                 onTap: () async {
-//                                   var response = await Navigator.push(
-//                                       context,
-//                                       MaterialPageRoute(
-//                                           builder: (context) => SearchPage()));
-
-//                                   if (response == 'getDirection') {
-//                                     showDetailSheet();
-//                                   }
-//                                 },
-//                                 child: Container(
-//                                   decoration: BoxDecoration(
-//                                       color: Colors.white,
-//                                       borderRadius: BorderRadius.circular(4),
-//                                       // ignore: prefer_const_literals_to_create_immutables
-//                                       boxShadow: [
-//                                         BoxShadow(
-//                                             color: Colors.black12,
-//                                             blurRadius: 5.0,
-//                                             spreadRadius: 0.5,
-//                                             offset: Offset(
-//                                               0.7,
-//                                               0.7,
-//                                             ))
-//                                       ]),
-//                                   child: Padding(
-//                                     padding: EdgeInsets.all(12.0),
-//                                     child: Row(
-//                                       // ignore: prefer_const_literals_to_create_immutables
-//                                       children: <Widget>[
-//                                         Icon(
-//                                           Icons.search,
-//                                           color: Colors.blueAccent,
-//                                         ),
-//                                         SizedBox(
-//                                           width: 10,
-//                                         ),
-//                                         Text('Search Destination'),
-//                                       ],
-//                                     ),
-//                                   ),
-//                                 ),
-//                               ),
-//                               SizedBox(
-//                                 height: 12,
-//                               ),
-//                               Container(
-//                                 decoration: BoxDecoration(
-//                                     color: Colors.white,
-//                                     borderRadius: BorderRadius.circular(4),
-//                                     // ignore: prefer_const_literals_to_create_immutables
-//                                     boxShadow: [
-//                                       BoxShadow(
-//                                           color: Colors.black12,
-//                                           blurRadius: 5.0,
-//                                           spreadRadius: 0.5,
-//                                           offset: Offset(
-//                                             0.7,
-//                                             0.7,
-//                                           ))
-//                                     ]),
-//                                 child: Row(
-//                                   children: <Widget>[
-//                                     SizedBox(
-//                                       width: 5,
-//                                     ),
-//                                     Icon(
-//                                       OMIcons.home,
-//                                       color: Colors.black,
-//                                     ),
-//                                     SizedBox(
-//                                       width: 5,
-//                                     ),
-//                                     TextButton(
-//                                         onPressed: () async {
-//                                           showDetailSheet();
-//                                         },
-//                                         child: Text(
-//                                           'Skip',
-//                                           style: TextStyle(color: Colors.black),
-//                                         )),
-//                                     SizedBox(
-//                                       height: 3,
-//                                     )
-//                                   ],
-//                                 ),
-//                               ),
-//                               SizedBox(
-//                                 height: 12,
-//                               ),
-//                               Container(
-//                                 decoration: BoxDecoration(
-//                                     color: Colors.white,
-//                                     borderRadius: BorderRadius.circular(4),
-//                                     // ignore: prefer_const_literals_to_create_immutables
-//                                     boxShadow: [
-//                                       BoxShadow(
-//                                           color: Colors.black12,
-//                                           blurRadius: 5.0,
-//                                           spreadRadius: 0.5,
-//                                           offset: Offset(
-//                                             0.7,
-//                                             0.7,
-//                                           ))
-//                                     ]),
-//                                 child: Row(
-//                                   children: <Widget>[
-//                                     SizedBox(
-//                                       width: 5,
-//                                     ),
-//                                     Icon(
-//                                       OMIcons.workOutline,
-//                                       color: Colors.black,
-//                                     ),
-//                                     SizedBox(
-//                                       width: 12,
-//                                     ),
-//                                     TextButton(
-//                                       //Change the screen to allow the user to specify the location manually
-//                                       //TODO
-//                                       onPressed: () async {
-//                                         setState(() {
-//                                           pinStatus = 'direction location';
-//                                           locationOnMap = true;
-//                                         });
-//                                       },
-//                                       child: Text(
-//                                         'Set location on map',
-//                                         style: TextStyle(
-//                                           color: Colors.black,
-//                                         ),
-//                                       ),
-//                                     )
-//                                   ],
-//                                 ),
-//                               ),
-                            
