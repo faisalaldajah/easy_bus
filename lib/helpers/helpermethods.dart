@@ -103,20 +103,6 @@ class HelperMethods {
     return directionDetails;
   }
 
-  static int estimateFares(DirectionDetails details) {
-    // per km = $0.3,
-    // per minute = $0.2,
-    // base fare = $3,
-
-    double baseFare = 0.6;
-    double distanceFare = (details.distanceValue / 1000) * 0.21;
-    double timeFare = (details.durationValue / 60);
-
-    double totalFare = baseFare + distanceFare + timeFare;
-
-    return totalFare.truncate();
-  }
-
   static double generateRandomNumber(int max) {
     var randomGenerator = Random();
     int randInt = randomGenerator.nextInt(max);

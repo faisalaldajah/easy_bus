@@ -25,7 +25,6 @@ import 'package:outline_material_icons/outline_material_icons.dart';
 import 'dart:io';
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:provider/provider.dart';
-import 'package:easy_bus/widgets/BusButton.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class MainPage extends StatefulWidget {
@@ -68,13 +67,12 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
   List<NearbyDriver> availableDrivers;
 
   bool nearbyDriversKeysLoaded = false;
-  String adder;
   bool isRequestingLocationDetails = false;
   bool locationOnMap = false;
-  String pinStatus = 'no pin';
   String homeAddress;
   String distenationAdrress;
   String pickUpAdrress;
+
   void setupPositionLocator() async {
     Position position = await geoLocator.getCurrentPosition(
         desiredAccuracy: LocationAccuracy.bestForNavigation);
@@ -1117,7 +1115,6 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
       'destination_address': destination.placeName,
       'location': pickupMap,
       'destination': destinationMap,
-      'payment_method': 'card',
       'driver_id': 'waiting',
     };
 
@@ -1128,7 +1125,7 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
       if (event.snapshot.value == null) {
         return;
       }
-
+      //TODO
       //get car details
       if (event.snapshot.value['car_details'] != null) {
         setState(() {
@@ -1297,7 +1294,6 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
   }
 
   void findDriver() {
-    print(driverType);
     if (availableDrivers.isEmpty) {
       cancelRequest();
       resetApp();
