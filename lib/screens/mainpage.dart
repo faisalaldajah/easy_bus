@@ -371,24 +371,25 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
                       const SizedBox(
                         width: 15,
                       ),
-                      Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        // ignore: prefer_const_literals_to_create_immutables
-                        children: <Widget>[
-                          Flexible(
-                            child: Text(
+                      Flexible(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          // ignore: prefer_const_literals_to_create_immutables
+                          children: <Widget>[
+                            Text(
                               currentUserInfo.fullName,
-                              style: const TextStyle(
-                                fontSize: 20,
+                              style: TextStyle(
+                                fontSize: 15,
                                 fontFamily: 'Brand-Bold',
                                 overflow: TextOverflow.ellipsis,
                               ),
+                              overflow: TextOverflow.ellipsis,
                             ),
-                          ),
-                          const SizedBox(
-                            height: 5,
-                          ),
-                        ],
+                            const SizedBox(
+                              height: 5,
+                            ),
+                          ],
+                        ),
                       )
                     ],
                   ),
