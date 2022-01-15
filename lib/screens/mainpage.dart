@@ -36,7 +36,7 @@ class MainPage extends StatefulWidget {
 
 class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
   GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
-  double searchSheetHeight = (Platform.isIOS) ? 300 : 275;
+  double searchSheetHeight = (Platform.isIOS) ? 300 : 290;
   double rideDetailsSheetHeight = 0; // (Platform.isAndroid) ? 235 : 260
   double requestingSheetHeight = 0; // (Platform.isAndroid) ? 195 : 220
   double tripSheetHeight = 0; // (Platform.isAndroid) ? 275 : 300
@@ -116,13 +116,14 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
     });
   }
 
+  //TODO
   void createMarker() {
     if (nearbyIcon == null) {
       ImageConfiguration imageConfiguration =
           createLocalImageConfiguration(context, size: Size(2, 2));
       BitmapDescriptor.fromAssetImage(
         imageConfiguration,
-        (Platform.isIOS) ? 'images/car_ios.png' : 'images/car_android.png',
+        (Platform.isIOS) ? 'images/bus.png' : 'images/bus.png',
       ).then((icon) {
         nearbyIcon = icon;
       });
@@ -486,7 +487,7 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
             ),
           ),
 
-          /// SearchSheet
+          /// start Sheet
           Positioned(
             left: 0,
             right: 0,
@@ -561,7 +562,7 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
             ),
           ),
 
-          /// RideDetails Sheet
+          /// Ride Details Sheet
           Positioned(
             left: 0,
             right: 0,
@@ -746,7 +747,7 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
             ),
           ),
 
-          /// Trip Sheet
+          /// Trip Sheet Details
           Positioned(
             left: 0,
             right: 0,

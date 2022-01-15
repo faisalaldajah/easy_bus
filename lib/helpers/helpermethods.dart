@@ -144,7 +144,5 @@ class HelperMethods {
     // ignore: unused_local_variable
     var response = await http.post('https://fcm.googleapis.com/fcm/send',
         headers: headerMap, body: jsonEncode(bodyMap));
-
-    //print(response.body);
   }
 }
